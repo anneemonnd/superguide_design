@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide de cours PASS</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c1: #C4607A;
+    --c2: #E8A0B4;
+    --c3: #F7D6E0;
+    --bg: #FDF6F0;
+    --card: #ffffff;
+    --text: #2a2a2a;
+    --text-muted: #888;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); padding: 2rem 1rem 4rem; }
+  .container { max-width: 700px; margin: 0 auto; }
+
+  /* SETTINGS BAR */
+  .settings-bar { background: var(--card); border: 1px solid var(--c3); border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 2rem; }
+  .settings-title { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .settings-grid .full { grid-column: 1 / -1; }
+  .settings-field label { display: block; font-size: 0.73rem; color: var(--text-muted); margin-bottom: 3px; }
+  .settings-field input[type="text"] { width: 100%; border: 1px solid var(--c3); border-radius: 7px; padding: 0.45rem 0.7rem; font-family: 'Outfit', sans-serif; font-size: 0.88rem; color: var(--text); background: var(--bg); outline: none; }
+  .settings-field input:focus { border-color: var(--c2); }
+  .color-label { font-size: 0.73rem; color: var(--text-muted); margin-bottom: 6px; display: block; }
+  .color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+  .swatch-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+  .swatch { width: 28px; height: 28px; border-radius: 50%; border: 2.5px solid transparent; transition: transform 0.15s, border-color 0.15s; }
+  .swatch-wrap:hover .swatch { transform: scale(1.15); }
+  .swatch-wrap.selected .swatch { border-color: var(--text); }
+  .swatch-hex { font-size: 0.55rem; color: var(--text-muted); letter-spacing: 0.01em; font-family: monospace; user-select: text; cursor: text; }
+  .swatch-name { font-size: 0.55rem; color: var(--text-muted); user-select: text; cursor: text; text-align: center; }
+  .settings-apply { margin-top: 1rem; width: 100%; padding: 0.6rem; background: var(--c1); color: #fff; border: none; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .settings-apply:hover { opacity: 0.85; }
+
+  /* HEADER */
+  .cours-header { padding-bottom: 1.5rem; border-bottom: 2px solid var(--c1); margin-bottom: 2rem; }
+  .cours-code { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--c1); line-height: 1; }
+  .cours-titre { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem; font-weight: 400; }
+  .cours-prof { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+  /* RANKING */
+  .section-label { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--c1); margin-bottom: 0.75rem; }
+  .ranking-grid { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--c3); margin-bottom: 2.5rem; }
+  .ranking-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1.2rem; border-bottom: 1px solid var(--c3); font-size: 0.9rem; }
+  .ranking-row:last-child { border-bottom: none; }
+  .ranking-row:nth-child(even) { background: var(--c3); }
+  .ranking-label { color: var(--text-muted); }
+  .stars { font-size: 1.1rem; letter-spacing: 1px; color: var(--c1); }
+  .divider { height: 1px; background: var(--c3); margin: 2rem 0; }
+
+  /* TÉMOIGNAGE */
+  .temoignage { background: var(--card); border-radius: 16px; border: 1px solid var(--c3); padding: 1.4rem; margin-bottom: 1.2rem; }
+  .temoignage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .temoignage-anon { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--c1); }
+  .temoignage-note { background: var(--c3); color: var(--c1); font-weight: 600; font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 20px; }
+  .temoignage-stars { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1rem; margin-bottom: 1rem; }
+  .temoignage-star-row { display: flex; flex-direction: column; gap: 2px; }
+  .temoignage-star-label { color: var(--text-muted); font-size: 0.73rem; }
+  .temoignage-star-val { font-size: 1rem; color: var(--c1); letter-spacing: 1px; }
+  .temoignage-para { font-size: 0.9rem; line-height: 1.75; color: var(--text); white-space: pre-wrap; word-break: break-word; margin: 0; }
+
+  /* ADD BUTTON */
+  .add-btn { display: block; width: 100%; padding: 0.9rem; border: 2px dashed var(--c2); border-radius: 12px; background: none; color: var(--c1); font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: center; }
+  .add-btn:hover { background: var(--c3); }
+
+  /* FORM OVERLAY */
+  .form-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+  .form-overlay.active { display: flex; }
+  .form-card { background: var(--card); border-radius: 20px; padding: 2rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+  .form-titre { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--c1); margin-bottom: 1.2rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; font-weight: 500; }
+  .star-picker { display: flex; gap: 6px; font-size: 1.5rem; cursor: pointer; }
+  .star-picker span { color: #ddd; transition: color 0.15s; user-select: none; }
+  .star-picker span.active { color: var(--c1); }
+  .form-group textarea, .form-group input[type="text"] { width: 100%; border: 1px solid var(--c3); border-radius: 8px; padding: 0.6rem 0.8rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text); background: var(--bg); outline: none; resize: vertical; }
+  .form-group textarea:focus, .form-group input:focus { border-color: var(--c2); }
+  .form-btns { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
+  .btn-submit { flex: 1; padding: 0.75rem; background: var(--c1); color: #fff; border: none; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn-submit:hover { opacity: 0.85; }
+  .btn-cancel { flex: 1; padding: 0.75rem; background: none; border: 1px solid var(--c3); border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: var(--text-muted); cursor: pointer; }
+
+  .delete-btn { background: none; border: none; cursor: pointer; color: #ccc; font-size: 1.1rem; padding: 2px 4px; border-radius: 6px; transition: color 0.15s, background 0.15s, opacity 0.15s; line-height: 1; opacity: 0; }
+  .delete-btn:hover { color: #e05555; background: #fdeaea; }
+  .temoignage:hover .delete-btn { opacity: 1; }
+  .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  .confirm-overlay.active { display: flex; }
+  .confirm-card { background: var(--card); border-radius: 16px; padding: 1.8rem; width: 100%; max-width: 360px; text-align: center; }
+  .confirm-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--c1); margin-bottom: 0.6rem; }
+  .confirm-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.4rem; line-height: 1.5; }
+  .confirm-btns { display: flex; gap: 0.8rem; }
+  .confirm-yes { flex: 1; padding: 0.7rem; background: #e05555; color: #fff; border: none; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+  .confirm-no { flex: 1; padding: 0.7rem; background: none; border: 1px solid var(--c3); border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; }
+
+  .download-btn { display: block; width: 100%; padding: 0.75rem; border: 1.5px solid var(--c2); border-radius: 12px; background: none; color: var(--c1); font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: center; margin-top: 0.75rem; }
+  .download-btn:hover { background: var(--c3); }
+  @media (max-width: 480px) {
+    .cours-code { font-size: 2rem; }
+    .settings-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- SETTINGS -->
+  <div class="settings-bar">
+    <div class="settings-title">⚙ Personnaliser</div>
+    <div class="settings-grid">
+      <div class="settings-field">
+        <label>Sigle du cours</label>
+        <input type="text" id="setCode" value="BCM1531">
+      </div>
+      <div class="settings-field">
+        <label>Titre du cours</label>
+        <input type="text" id="setTitre" value="Introduction à la biochimie — 3 cr.">
+      </div>
+      <div class="settings-field">
+        <label>Prof principal</label>
+        <input type="text" id="setProf" value="Dr. Jean Tremblay">
+      </div>
+      <div class="settings-field">
+        <label>Nombre de crédits</label>
+        <input type="text" id="setCredits" value="3" placeholder="ex: 3">
+      </div>
+      <div class="settings-field">
+        <label>Titre section ranking</label>
+        <input type="text" id="setRanking" value="Ranking moyen">
+      </div>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <div class="settings-field">
+        <label>Mot du professeur (optionnel)</label>
+        <textarea id="setMotProf" rows="3" placeholder="Un mot du prof sur le cours, son style d'enseignement, ses conseils…" style="width:100%; border:1px solid var(--c3); border-radius:7px; padding:0.45rem 0.7rem; font-family:'Outfit',sans-serif; font-size:0.88rem; color:var(--text); background:var(--bg); outline:none; resize:vertical;"></textarea>
+      </div>
+    </div>
+
+    <div style="margin-top:1rem; grid-column: 1/-1;">
+      <span class="color-label" style="margin-bottom:8px; display:block">Ranking moyen (modifiable)</span>
+      <div id="manualRanking"></div>
+    </div>
+
+    <div style="margin-top:1rem">
+      <span class="color-label">Thème de couleur</span>
+      <div class="color-swatches" id="swatches"></div>
+    </div>
+
+    <button class="settings-apply" onclick="applySettings()">Appliquer</button>
+  </div>
+
+  <!-- HEADER -->
+  <div class="cours-header" id="coursHeader">
+    <div class="cours-code" id="dispCode">BCM1531</div>
+    <div class="cours-titre" id="dispTitre">Introduction à la biochimie — 3 cr.</div>
+    <div class="cours-prof" id="dispProf">Prof principal : Dr. Jean Tremblay</div>
+    <div class="cours-prof" id="dispCredits" style="margin-top:0.25rem;">3 crédits</div>
+  </div>
+
+  <div id="motProfSection" style="display:none; margin-bottom:1.5rem;">
+    <div class="section-label" style="margin-bottom:0.75rem;">Mot du professeur</div>
+    <div style="background:var(--card); border-radius:14px; border:1px solid var(--c3); padding:1.2rem 1.4rem;">
+      <p id="dispMotProf" style="font-size:0.9rem; line-height:1.75; color:#555; white-space:pre-wrap; word-break:break-word; margin:0;"></p>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div id="rankingSection">
+  <div class="section-label" id="dispRanking">Ranking moyen</div>
+  <div class="ranking-grid">
+    <div class="ranking-row"><span class="ranking-label">Difficulté des examens</span><span class="stars" id="avg-0"></span></div>
+    <div class="ranking-row"><span class="ranking-label">Difficulté de compréhension</span><span class="stars" id="avg-1"></span></div>
+    <div class="ranking-row"><span class="ranking-label">Charge de travail</span><span class="stars" id="avg-2"></span></div>
+    <div class="ranking-row"><span class="ranking-label">Qualité des notes / ressources</span><span class="stars" id="avg-3"></span></div>
+  </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-label" style="margin-bottom:1.2rem">Témoignages</div>
+  <div id="temoignagesContainer"></div>
+  <button class="add-btn" onclick="openForm()">+ Ajouter un témoignage</button>
+  <button class="download-btn" onclick="downloadWord()">⬇ Télécharger en Word (.doc)</button>
+  <button class="download-btn" onclick="printPDF()">⬇ Sauvegarder en PDF</button>
+  <div style="display:flex;gap:0.6rem;margin-top:0.75rem;">
+    <button class="download-btn" style="margin-top:0;flex:1" onclick="exportJSON()">↑ Exporter les données (.json)</button>
+    <button class="download-btn" style="margin-top:0;flex:1" onclick="document.getElementById('importInput').click()">↓ Importer des données (.json)</button>
+    <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)">
+  </div>
+
+  <div style="margin-top:1rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--c1); margin-bottom:0.6rem;">📷 Exporter en images (PNG)</div>
+    <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+      <button class="download-btn" style="margin-top:0;flex:1" onclick="exportAllPNG()">📷 Tout en un seul PNG</button>
+      <button class="download-btn" style="margin-top:0;flex:1" onclick="exportSeparatePNG()">📷 Un PNG par témoignage</button>
+      <button class="download-btn" style="margin-top:0;flex:1" onclick="exportZipPNG()">📦 Tout en ZIP</button>
+    </div>
+    <div id="exportStatus" style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;min-height:1.2em;text-align:center;"></div>
+  </div>
+
+
+
+  <div style="margin-top:2.5rem; border-top:1px solid var(--c3); padding-top:1.5rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--c1); margin-bottom:1rem;">💾 Comment sauvegarder ton travail</div>
+    <div style="background:var(--card); border:1px solid var(--c3); border-radius:14px; padding:1.2rem 1.4rem; font-size:0.85rem; line-height:1.8; color:#555;">
+
+      <p style="margin-bottom:0.8rem"><strong style="color:var(--c1)">Sauvegarde automatique (même ordi)</strong><br>
+      Tes témoignages, réglages et thème sont sauvegardés automatiquement dans ton navigateur. Si tu rouvres ce fichier HTML dans le même navigateur sur le même ordinateur, tout sera encore là.</p>
+
+      <p style="margin-bottom:0.8rem"><strong style="color:var(--c1)">Partager ou transférer vers un autre ordi</strong><br>
+      Utilise le bouton <strong>↑ Exporter les données (.json)</strong> pour télécharger un fichier de sauvegarde. Envoie ce fichier à quelqu'un (ou transfère-le sur un autre ordi), puis utilise <strong>↓ Importer des données (.json)</strong> pour tout restaurer. C'est la meilleure façon de ne rien perdre — exporte un fichier JSON chaque fois que tu as terminé une session.</p>
+
+      <p style="margin-bottom:0.8rem"><strong style="color:var(--c1)">Préserver le format exact</strong><br>
+      Word et PDF ne reproduisent pas fidèlement la mise en page. Pour partager le guide tel quel, <strong>envoie directement le fichier HTML</strong> — le destinataire n'a qu'à l'ouvrir dans son navigateur pour voir exactement la même chose.</p>
+
+      <p style="margin:0"><strong style="color:var(--c1)">⚠ Attention</strong><br>
+      Vider le cache du navigateur efface la sauvegarde automatique. Exporte ton JSON régulièrement pour garder une copie sûre de ton travail.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-overlay" id="formOverlay">
+  <div class="form-card">
+    <div class="form-titre">Nouveau témoignage</div>
+    <div class="form-group">
+      <label>Note obtenue (ex: A, B+, C)</label>
+      <input type="text" id="inputNote" placeholder="A+" maxlength="3">
+    </div>
+    <div class="form-group">
+      <label>Identité</label>
+      <div style="display:flex; gap:8px; margin-bottom:6px;">
+        <button type="button" id="btnAnon" onclick="setIdentMode('anon')" style="flex:1; padding:0.45rem 0.5rem; border-radius:8px; border:1.5px solid var(--c1); background:var(--c1); color:#fff; font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s;">Anonyme</button>
+        <button type="button" id="btnNamed" onclick="setIdentMode('named')" style="flex:1; padding:0.45rem 0.5rem; border-radius:8px; border:1.5px solid var(--c3); background:none; color:var(--text-muted); font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s;">Avec nom</button>
+      </div>
+      <input type="text" id="inputNom" placeholder="Prénom ou surnom" style="display:none; width:100%; border:1px solid var(--c3); border-radius:7px; padding:0.45rem 0.7rem; font-family:'Outfit',sans-serif; font-size:0.88rem; color:var(--text); background:var(--bg); outline:none;">
+    </div>
+    <div class="form-group"><label>Difficulté des examens</label><div class="star-picker" data-field="0"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div></div>
+    <div class="form-group"><label>Difficulté de compréhension</label><div class="star-picker" data-field="1"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div></div>
+    <div class="form-group"><label>Charge de travail</label><div class="star-picker" data-field="2"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div></div>
+    <div class="form-group"><label>Qualité des notes / ressources</label><div class="star-picker" data-field="3"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div></div>
+    <div class="form-group">
+      <label>Témoignage</label>
+      <textarea id="inputTemoignage" rows="5" placeholder="Parle du cours librement — stratégie, prof, regrets, conseils..."></textarea>
+    </div>
+    <div class="form-btns">
+      <button class="btn-cancel" onclick="closeForm()">Annuler</button>
+      <button class="btn-submit" onclick="submitForm()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <div class="confirm-title">Supprimer ce témoignage ?</div>
+    <div class="confirm-text">Cette action est irréversible. Le témoignage sera définitivement supprimé.</div>
+    <div class="confirm-btns">
+      <button class="confirm-no" onclick="cancelDelete()">Annuler</button>
+      <button class="confirm-yes" onclick="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const THEMES = [
+    // ROUGES
+    { name: "Écarlate",      c1:"#CC1133", c2:"#EE6677", c3:"#FAC8CC", bg:"#FDF0F1", dot:"#EE6677" },
+    { name: "Rouge",         c1:"#B84444", c2:"#E89090", c3:"#FAD6D6", bg:"#FFF0F0", dot:"#E89090" },
+    { name: "Brique",        c1:"#9A3A2A", c2:"#D47A6A", c3:"#F5D0C8", bg:"#FDF4F2", dot:"#D47A6A" },
+    // ORANGES
+    { name: "Corail",        c1:"#C45A3A", c2:"#F09070", c3:"#FAD8CC", bg:"#FDF4F0", dot:"#F09070" },
+    { name: "Mandarine",     c1:"#CC5500", c2:"#EE9944", c3:"#FAE0B8", bg:"#FDF8F0", dot:"#EE9944" },
+    { name: "Pêche",         c1:"#C4714A", c2:"#E8AA88", c3:"#FAE0D0", bg:"#FDF6F0", dot:"#E8AA88" },
+    // BRUNS
+    { name: "Caramel",       c1:"#A07040", c2:"#D4A870", c3:"#F4E0C0", bg:"#FDF8F0", dot:"#D4A870" },
+    { name: "Sable",         c1:"#9A8060", c2:"#C8B090", c3:"#EEE0CC", bg:"#FDFAF5", dot:"#C8B090" },
+    // JAUNES
+    { name: "Moutarde",      c1:"#9A7A00", c2:"#D4B840", c3:"#F5EAA0", bg:"#FFFEF0", dot:"#D4B840" },
+    { name: "Jaune",         c1:"#B5860A", c2:"#E8C96A", c3:"#FDF0C0", bg:"#FFFDF0", dot:"#E8C96A" },
+    { name: "Citron",        c1:"#8A9A00", c2:"#CCDD44", c3:"#F0F5AA", bg:"#FBFDF0", dot:"#CCDD44" },
+    // VERTS
+    { name: "Olive",         c1:"#6A7A20", c2:"#AABC60", c3:"#DEE8A8", bg:"#F8FAF0", dot:"#AABC60" },
+    { name: "Sauge",         c1:"#5A7A5A", c2:"#96B896", c3:"#D4E8D4", bg:"#F2F8F2", dot:"#96B896" },
+    { name: "Vert",          c1:"#4A8C6F", c2:"#8CC4A8", c3:"#D0EDDE", bg:"#F0FDF6", dot:"#8CC4A8" },
+    { name: "Émeraude",      c1:"#1A7A4A", c2:"#5AB888", c3:"#B8EDD4", bg:"#F0FDF7", dot:"#5AB888" },
+    // CYANS / TURQUOISES
+    { name: "Menthe",        c1:"#2E9E8A", c2:"#7ED4C4", c3:"#C8EDE8", bg:"#F0FDFB", dot:"#7ED4C4" },
+    { name: "Canard",        c1:"#1A6A6A", c2:"#5AAAAA", c3:"#B8E4E4", bg:"#F0FAFA", dot:"#5AAAAA" },
+    { name: "Turquoise",     c1:"#1A8FA0", c2:"#6ECCD8", c3:"#C4EEF4", bg:"#F0FBFD", dot:"#6ECCD8" },
+    // BLEUS
+    { name: "Ciel",          c1:"#3A7EC8", c2:"#80B8F0", c3:"#CCE4FC", bg:"#F0F7FF", dot:"#80B8F0" },
+    { name: "Bleu",          c1:"#4A7FB5", c2:"#90B8E0", c3:"#D6E8F7", bg:"#F0F6FD", dot:"#90B8E0" },
+    { name: "Cobalt",        c1:"#2255BB", c2:"#5599EE", c3:"#C4DAFC", bg:"#F0F5FE", dot:"#5599EE" },
+    // INDIGOS / VIOLETS
+    { name: "Indigo",        c1:"#4455AA", c2:"#8899DD", c3:"#D4DAFC", bg:"#F0F2FD", dot:"#8899DD" },
+    { name: "Lavande",       c1:"#7A6FAA", c2:"#B4AEDC", c3:"#E4E0F4", bg:"#F5F4FD", dot:"#B4AEDC" },
+    { name: "Améthyste",     c1:"#8844AA", c2:"#BB88DD", c3:"#EED8F8", bg:"#F8F0FD", dot:"#BB88DD" },
+    { name: "Lilas",         c1:"#7B5EA7", c2:"#BAA0D8", c3:"#E8D8F7", bg:"#F7F0FD", dot:"#BAA0D8" },
+    // ROSES / MAGENTAS
+    { name: "Fuchsia",       c1:"#BB2288", c2:"#EE77CC", c3:"#F9D0EE", bg:"#FDF0FA", dot:"#EE77CC" },
+    { name: "Framboise",     c1:"#AA2255", c2:"#DD6699", c3:"#F8D0E4", bg:"#FDF0F6", dot:"#DD6699" },
+    { name: "Rose",          c1:"#C4607A", c2:"#E8A0B4", c3:"#F7D6E0", bg:"#FDF6F0", dot:"#E8A0B4" },
+    { name: "Poudre",        c1:"#B07090", c2:"#DDAAC0", c3:"#F5E0EC", bg:"#FDF5F8", dot:"#DDAAC0" },
+    // NEUTRES
+    { name: "Platine",       c1:"#707080", c2:"#AAABB8", c3:"#DCDDE4", bg:"#F6F6F8", dot:"#AAABB8" },
+  ];
+
+  let selectedTheme = 0;
+  let manualStars = [null, null, null, null];
+  const rankingLabels = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+
+  function buildManualRanking() {
+    const container = document.getElementById('manualRanking');
+    container.innerHTML = '';
+    rankingLabels.forEach((label, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--c3); font-size:0.82rem;';
+      const lbl = document.createElement('span');
+      lbl.textContent = label;
+      lbl.style.color = 'var(--text-muted)';
+      const picker = document.createElement('div');
+      picker.style.cssText = 'display:flex; gap:4px; font-size:1.3rem; cursor:pointer;';
+      for (let j = 1; j <= 5; j++) {
+        const s = document.createElement('span');
+        s.textContent = '★';
+        s.style.color = (manualStars[i] !== null && j <= manualStars[i]) ? 'var(--c1)' : '#ddd';
+        s.style.transition = 'color 0.1s';
+        const jj = j;
+        s.onmouseover = () => { for(let k=0;k<5;k++) picker.children[k].style.color = k<jj ? 'var(--c1)' : '#ddd'; };
+        s.onmouseout = () => { for(let k=0;k<5;k++) picker.children[k].style.color = (manualStars[i]!==null && k<manualStars[i]) ? 'var(--c1)' : '#ddd'; };
+        s.onclick = () => { manualStars[i] = (manualStars[i] === jj) ? null : jj; buildManualRanking(); };
+        picker.appendChild(s);
+      }
+      const reset = document.createElement('span');
+      reset.textContent = manualStars[i] !== null ? ' ↺' : ' auto';
+      reset.title = 'Réinitialiser (calculé automatiquement depuis les témoignages)';
+      reset.style.cssText = 'font-size:0.72rem; color:var(--text-muted); cursor:pointer; margin-left:6px; white-space:nowrap;';
+      reset.onclick = () => { manualStars[i] = null; buildManualRanking(); updateAvg(); };
+      const right = document.createElement('div');
+      right.style.cssText = 'display:flex; align-items:center;';
+      right.appendChild(picker);
+      right.appendChild(reset);
+      row.appendChild(lbl);
+      row.appendChild(right);
+      container.appendChild(row);
+    });
+  }
+
+  function buildSwatches() {
+    const container = document.getElementById('swatches');
+    THEMES.forEach((t, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'swatch-wrap' + (i === 0 ? ' selected' : '');
+
+      const s = document.createElement('div');
+      s.className = 'swatch';
+      s.style.background = t.dot;
+      s.title = t.name;
+
+      const hex = document.createElement('span');
+      hex.className = 'swatch-hex';
+      hex.textContent = t.bg.toUpperCase();
+      hex.onclick = e => e.stopPropagation();
+
+      const name = document.createElement('span');
+      name.className = 'swatch-name';
+      name.textContent = t.name;
+      name.onclick = e => e.stopPropagation();
+
+      wrap.appendChild(s);
+      wrap.appendChild(name);
+      wrap.appendChild(hex);
+      wrap.onclick = () => {
+        document.querySelectorAll('.swatch-wrap').forEach(x => x.classList.remove('selected'));
+        wrap.classList.add('selected');
+        selectedTheme = i;
+      };
+      container.appendChild(wrap);
+    });
+  }
+
+  function applyTheme(t) {
+    const root = document.documentElement;
+    root.style.setProperty('--c1', t.c1);
+    root.style.setProperty('--c2', t.c2);
+    root.style.setProperty('--c3', t.c3);
+    root.style.setProperty('--bg', t.bg);
+  }
+
+  function applySettings() {
+    document.getElementById('dispCode').textContent = document.getElementById('setCode').value || 'BCM1531';
+    document.getElementById('dispTitre').textContent = document.getElementById('setTitre').value || '';
+    document.getElementById('dispProf').textContent = 'Prof principal : ' + (document.getElementById('setProf').value || '');
+    const credits = document.getElementById('setCredits').value.trim();
+    const creditsEl = document.getElementById('dispCredits');
+    if (credits) { creditsEl.textContent = credits + ' crédit' + (credits === '1' ? '' : 's'); creditsEl.style.display = ''; }
+    else { creditsEl.style.display = 'none'; }
+    document.getElementById('dispRanking').textContent = document.getElementById('setRanking').value || 'Ranking moyen';
+    const motProf = document.getElementById('setMotProf').value.trim();
+    const motProfSection = document.getElementById('motProfSection');
+    if (motProf) { document.getElementById('dispMotProf').textContent = motProf; motProfSection.style.display = ''; }
+    else { motProfSection.style.display = 'none'; }
+    applyTheme(THEMES[selectedTheme]);
+    saveToStorage();
+    renderTemoignages();
+    buildManualRanking();
+  }
+
+  const STORAGE_KEY = 'pass_guide_' + (window.location.pathname + window.location.search).replace(/[^a-z0-9]/gi,'_');
+
+  const defaultTemoignages = [
+    { note: "A+", stars: [3, 4, 2, 4], nom: null, texte: "J'ai fait des Anki pour tous les acides aminés dès la semaine 1. Les examens sont beaucoup sur la mémorisation donc commencer tôt fait une grosse différence. Le prof explique bien mais va vite — le pacing est intense vers la fin du semestre. Mon plus grand regret : avoir attendu trop longtemps avant de mémoriser les structures." },
+    { note: "B+", stars: [4, 3, 4, 3], nom: null, texte: "Les examens sont basés sur les diapos donc je relisais chaque semaine au lieu d'accumuler. Khan Academy m'a sauvé la vie pour les concepts abstraits. Y'a clairement plus de travail que ce qui est annoncé dans le plan de cours. Forme un groupe d'étude tôt — ça change tout." }
+  ];
+
+  let temoignages;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    temoignages = saved ? JSON.parse(saved).temoignages || defaultTemoignages : defaultTemoignages;
+  } catch(e) {
+    temoignages = defaultTemoignages;
+  }
+
+  function saveToStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        temoignages,
+        settings: {
+          code: document.getElementById('setCode').value,
+          titre: document.getElementById('setTitre').value,
+          prof: document.getElementById('setProf').value,
+          credits: document.getElementById('setCredits').value,
+          ranking: document.getElementById('setRanking').value,
+          motProf: document.getElementById('setMotProf').value,
+          themeIndex: selectedTheme,
+          manualStars: [...manualStars]
+        }
+      }));
+    } catch(e) {}
+  }
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data.settings) return;
+      const s = data.settings;
+      if (s.code)    { document.getElementById('setCode').value    = s.code;    document.getElementById('dispCode').textContent = s.code; }
+      if (s.titre)   { document.getElementById('setTitre').value   = s.titre;   document.getElementById('dispTitre').textContent = s.titre; }
+      if (s.prof)    { document.getElementById('setProf').value    = s.prof;    document.getElementById('dispProf').textContent = 'Prof principal : ' + s.prof; }
+      if (s.ranking) { document.getElementById('setRanking').value = s.ranking; document.getElementById('dispRanking').textContent = s.ranking; }
+      if (s.motProf !== undefined) {
+        document.getElementById('setMotProf').value = s.motProf;
+        const motProfSection = document.getElementById('motProfSection');
+        if (s.motProf.trim()) { document.getElementById('dispMotProf').textContent = s.motProf; motProfSection.style.display = ''; }
+        else { motProfSection.style.display = 'none'; }
+      }
+      if (s.credits !== undefined) {
+        document.getElementById('setCredits').value = s.credits;
+        const creditsEl = document.getElementById('dispCredits');
+        if (s.credits) { creditsEl.textContent = s.credits + ' crédit' + (s.credits === '1' ? '' : 's'); creditsEl.style.display = ''; }
+        else { creditsEl.style.display = 'none'; }
+      }
+      if (s.themeIndex !== undefined) {
+        selectedTheme = s.themeIndex;
+        applyTheme(THEMES[selectedTheme]);
+        document.querySelectorAll('.swatch-wrap').forEach((sw, i) => sw.classList.toggle('selected', i === selectedTheme));
+      }
+      if (s.manualStars) {
+        manualStars = s.manualStars;
+      }
+    } catch(e) {}
+  }
+
+  let formStars = [0, 0, 0, 0];
+  const criteres = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+
+  function starsHTML(n, total=5) {
+    return '★'.repeat(n) + '<span style="color:#ddd">★</span>'.repeat(total - n);
+  }
+
+  function updateAvg() {
+    for (let i = 0; i < 4; i++) {
+      const val = manualStars[i] !== null
+        ? manualStars[i]
+        : (temoignages.length ? Math.round(temoignages.reduce((s, t) => s + t.stars[i], 0) / temoignages.length) : 0);
+      document.getElementById(`avg-${i}`).innerHTML = starsHTML(val);
+    }
+  }
+
+  function escapeHTML(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderTemoignages() {
+    const container = document.getElementById('temoignagesContainer');
+    container.innerHTML = '';
+    temoignages.forEach((t, i) => {
+      const div = document.createElement('div');
+      div.className = 'temoignage';
+      div.innerHTML = `
+        <div class="temoignage-header">
+          <div class="temoignage-anon">${t.nom ? escapeHTML(t.nom) : `Étudiant·e anonyme #${i+1}`}</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="temoignage-note">Note : ${escapeHTML(t.note)}</div>
+            <button class="delete-btn" onclick="askDelete(${i})" title="Supprimer">✕</button>
+          </div>
+        </div>
+        <div class="temoignage-stars">
+          ${criteres.map((c, j) => `
+            <div class="temoignage-star-row">
+              <span class="temoignage-star-label">${c}</span>
+              <span class="temoignage-star-val">${starsHTML(t.stars[j])}</span>
+            </div>`).join('')}
+        </div>
+        <p class="temoignage-para">${escapeHTML(t.texte)}</p>`;
+      container.appendChild(div);
+    });
+    updateAvg();
+  }
+
+  document.querySelectorAll('.star-picker').forEach(picker => {
+    const field = parseInt(picker.dataset.field);
+    const spans = picker.querySelectorAll('span');
+    spans.forEach((s, idx) => {
+      s.addEventListener('mouseover', () => spans.forEach((x, j) => x.classList.toggle('active', j <= idx)));
+      s.addEventListener('mouseout', () => spans.forEach((x, j) => x.classList.toggle('active', j < formStars[field])));
+      s.addEventListener('click', () => { formStars[field] = idx + 1; spans.forEach((x, j) => x.classList.toggle('active', j <= idx)); });
+    });
+  });
+
+  let identMode = 'anon';
+
+  function setIdentMode(mode) {
+    identMode = mode;
+    const btnAnon = document.getElementById('btnAnon');
+    const btnNamed = document.getElementById('btnNamed');
+    const inputNom = document.getElementById('inputNom');
+    if (mode === 'anon') {
+      btnAnon.style.background = 'var(--c1)'; btnAnon.style.color = '#fff'; btnAnon.style.borderColor = 'var(--c1)';
+      btnNamed.style.background = 'none'; btnNamed.style.color = 'var(--text-muted)'; btnNamed.style.borderColor = 'var(--c3)';
+      inputNom.style.display = 'none';
+    } else {
+      btnNamed.style.background = 'var(--c1)'; btnNamed.style.color = '#fff'; btnNamed.style.borderColor = 'var(--c1)';
+      btnAnon.style.background = 'none'; btnAnon.style.color = 'var(--text-muted)'; btnAnon.style.borderColor = 'var(--c3)';
+      inputNom.style.display = 'block';
+    }
+  }
+
+  function openForm() {
+    formStars = [0, 0, 0, 0];
+    identMode = 'anon';
+    document.querySelectorAll('.star-picker span').forEach(s => s.classList.remove('active'));
+    document.getElementById('inputNote').value = '';
+    document.getElementById('inputNom').value = '';
+    document.getElementById('inputTemoignage').value = '';
+    setIdentMode('anon');
+    document.getElementById('formOverlay').classList.add('active');
+  }
+
+  function closeForm() { document.getElementById('formOverlay').classList.remove('active'); }
+
+  function submitForm() {
+    const note = document.getElementById('inputNote').value.trim() || '—';
+    const texte = document.getElementById('inputTemoignage').value.trim();
+    if (!texte) return;
+    const nom = identMode === 'named' ? (document.getElementById('inputNom').value.trim() || null) : null;
+    temoignages.push({ note, stars: [...formStars], texte, nom });
+    saveToStorage();
+    renderTemoignages();
+    closeForm();
+  }
+
+  let pendingDelete = null;
+
+  function askDelete(i) {
+    pendingDelete = i;
+    document.getElementById('confirmOverlay').classList.add('active');
+  }
+
+  function cancelDelete() {
+    pendingDelete = null;
+    document.getElementById('confirmOverlay').classList.remove('active');
+  }
+
+  function confirmDelete() {
+    if (pendingDelete !== null) {
+      temoignages.splice(pendingDelete, 1);
+      pendingDelete = null;
+      document.getElementById('confirmOverlay').classList.remove('active');
+      saveToStorage();
+      renderTemoignages();
+    }
+  }
+
+  document.getElementById('confirmOverlay').addEventListener('click', function(e) { if (e.target === this) cancelDelete(); });
+
+  document.getElementById('formOverlay').addEventListener('click', function(e) { if (e.target === this) closeForm(); });
+  buildSwatches();
+  buildManualRanking();
+  loadFromStorage();
+  buildManualRanking(); // rebuild after manualStars loaded
+  renderTemoignages();
+
+  async function downloadWord() {
+    try {
+      const code = document.getElementById('dispCode').textContent;
+      const titre = document.getElementById('dispTitre').textContent;
+      const prof = document.getElementById('dispProf').textContent;
+      const creditsEl = document.getElementById('dispCredits');
+      const credits = creditsEl && creditsEl.style.display !== 'none' ? creditsEl.textContent : '';
+      const rankingTitle = document.getElementById('dispRanking').textContent;
+
+      function starText(n, total=5) { return '★'.repeat(n) + '☆'.repeat(total-n); }
+      function getAvg(i) {
+        return manualStars[i] !== null
+          ? manualStars[i]
+          : (temoignages.length ? Math.round(temoignages.reduce((s,t)=>s+t.stars[i],0)/temoignages.length) : 0);
+      }
+
+      const rankLabels = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+      const critList = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+
+      const ROSE = '#C4607A';
+
+      let html = `
+<html xmlns:o='urn:schemas-microsoft-com:office:office'
+      xmlns:w='urn:schemas-microsoft-com:office:word'
+      xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='UTF-8'>
+<style>
+  body { font-family: Arial, sans-serif; color: #2a2a2a; margin: 2cm; }
+  h1 { font-size: 28pt; color: ${ROSE}; margin-bottom: 4px; }
+  .sub { font-size: 11pt; color: #888; margin: 2px 0; }
+  hr { border: none; border-top: 2px solid ${ROSE}; margin: 12px 0 20px; }
+  h2 { font-size: 14pt; color: ${ROSE}; margin: 24px 0 8px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+  td { padding: 6px 10px; font-size: 10pt; border: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background: #F7D6E0; }
+  .stars { color: ${ROSE}; }
+  .label { color: #555; }
+  .tname { font-size: 12pt; font-weight: bold; color: ${ROSE}; margin: 20px 0 4px; }
+  .tnote { font-size: 10pt; color: #888; }
+  .ttext { font-size: 10pt; line-height: 1.6; margin-top: 8px; }
+</style>
+</head><body>`;
+
+      html += `<h1>${code}</h1>`;
+      html += `<p class="sub">${titre}</p>`;
+      if (credits) html += `<p class="sub">${credits}</p>`;
+      html += `<p class="sub">${prof}</p>`;
+      html += `<hr>`;
+      html += `<h2>${rankingTitle}</h2>`;
+      html += `<table>`;
+      rankLabels.forEach((label, i) => {
+        html += `<tr><td class="label">${label}</td><td class="stars">${starText(getAvg(i))}</td></tr>`;
+      });
+      html += `</table>`;
+      html += `<h2>Témoignages</h2>`;
+
+      temoignages.forEach((t, i) => {
+        const label = t.nom ? t.nom : `Étudiant·e anonyme #${i+1}`;
+        html += `<p class="tname">${label} <span class="tnote">— Note : ${t.note}</span></p>`;
+        html += `<table>`;
+        critList.forEach((c, j) => {
+          html += `<tr><td class="label">${c}</td><td class="stars">${starText(t.stars[j])}</td></tr>`;
+        });
+        html += `</table>`;
+        html += `<p class="ttext">${t.texte}</p>`;
+      });
+
+      html += `</body></html>`;
+
+      const blob = new Blob([html], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${code}_guide_PASS.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch(err) {
+      alert('Erreur lors de la génération : ' + err.message);
+      console.error(err);
+    }
+  }
+  function printPDF() {
+    const code = document.getElementById('dispCode').textContent;
+    const titre = document.getElementById('dispTitre').textContent;
+    const prof = document.getElementById('dispProf').textContent;
+    const creditsEl = document.getElementById('dispCredits');
+    const credits = creditsEl && creditsEl.style.display !== 'none' ? creditsEl.textContent : '';
+    const rankingTitle = document.getElementById('dispRanking').textContent;
+
+    const root = document.documentElement;
+    const ROSE = getComputedStyle(root).getPropertyValue('--c1').trim() || '#C4607A';
+    const ROSE_LIGHT = getComputedStyle(root).getPropertyValue('--c3').trim() || '#F7D6E0';
+    const BG = getComputedStyle(root).getPropertyValue('--bg').trim() || '#FDF6F0';
+
+    function starText(n, total=5) { return '★'.repeat(n) + '<span style="color:#ddd">★</span>'.repeat(total-n); }
+    function getAvg(i) {
+      return manualStars[i] !== null
+        ? manualStars[i]
+        : (temoignages.length ? Math.round(temoignages.reduce((s,t)=>s+t.stars[i],0)/temoignages.length) : 0);
+    }
+
+    const rankLabels = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+    const critList = ["Difficulté des examens", "Difficulté de compréhension", "Charge de travail", "Qualité des notes / ressources"];
+
+    let rankRows = rankLabels.map((label, i) => `
+      <tr style="background:${i%2===1 ? ROSE_LIGHT : '#fff'}">
+        <td style="padding:7px 12px;color:#555;font-size:10pt;border:1px solid #e0e0e0">${label}</td>
+        <td style="padding:7px 12px;color:${ROSE};font-size:11pt;border:1px solid #e0e0e0">${starText(getAvg(i))}</td>
+      </tr>`).join('');
+
+    let temoignagesHTML = temoignages.map((t, i) => {
+      const label = t.nom ? t.nom : `Étudiant·e anonyme #${i+1}`;
+      const starRows = critList.map((c, j) => `
+        <tr style="background:${j%2===1 ? '#f9f9f9' : '#fff'}">
+          <td style="padding:5px 10px;color:#888;font-size:9.5pt;border:1px solid #e8e8e8">${c}</td>
+          <td style="padding:5px 10px;color:${ROSE};font-size:10pt;border:1px solid #e8e8e8">${starText(t.stars[j])}</td>
+        </tr>`).join('');
+      return `
+        <div style="background:#fff;border-radius:12px;border:1px solid ${ROSE_LIGHT};padding:14px;margin-bottom:14px;page-break-inside:avoid">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <span style="font-family:Georgia,serif;font-size:13pt;font-weight:bold;color:${ROSE}">${label}</span>
+            <span style="background:${ROSE_LIGHT};color:${ROSE};font-size:8.5pt;font-weight:600;padding:3px 10px;border-radius:20px">Note : ${t.note}</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:10px">${starRows}</table>
+          <p style="font-size:9.5pt;line-height:1.7;color:#2a2a2a;margin:0">${t.texte}</p>
+        </div>`;
+    }).join('');
+
+    const content = `
+      <div style="font-family:Arial,sans-serif;background:${BG};color:#2a2a2a;padding:32px 40px;max-width:720px;margin:0 auto">
+        <div style="padding-bottom:16px;border-bottom:2px solid ${ROSE};margin-bottom:24px">
+          <div style="font-family:Georgia,serif;font-size:30pt;font-weight:700;color:${ROSE};line-height:1">${code}</div>
+          <div style="font-size:10.5pt;color:#888;margin-top:4px;font-weight:300">${titre}</div>
+          ${credits ? `<div style="font-size:10pt;color:#888;margin-top:3px">${credits}</div>` : ''}
+          <div style="font-size:10pt;color:#888;margin-top:3px">${prof}</div>
+        </div>
+        <div style="font-family:Georgia,serif;font-size:14pt;font-weight:600;color:${ROSE};margin-bottom:10px">${rankingTitle}</div>
+        <div style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid ${ROSE_LIGHT};margin-bottom:28px">
+          <table style="width:100%;border-collapse:collapse">${rankRows}</table>
+        </div>
+        <div style="font-family:Georgia,serif;font-size:14pt;font-weight:600;color:${ROSE};margin-bottom:12px">Témoignages</div>
+        ${temoignagesHTML}
+      </div>`;
+
+    // Inject hidden iframe and print from it
+    let iframe = document.getElementById('__printFrame');
+    if (iframe) iframe.remove();
+    iframe = document.createElement('iframe');
+    iframe.id = '__printFrame';
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;';
+    document.body.appendChild(iframe);
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+      body { margin:0; padding:0; }
+      @media print { * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; } }
+    </style></head><body>${content}</body></html>`);
+    doc.close();
+    iframe.onload = () => { iframe.contentWindow.focus(); iframe.contentWindow.print(); };
+    // fallback if onload already fired
+    setTimeout(() => { try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch(e) {} }, 600);
+  }
+
+  function exportJSON() {
+    const code = document.getElementById('dispCode').textContent;
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${code}_guide_PASS.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        // Validate basic structure
+        if (!data.temoignages && !data.settings) {
+          alert("Fichier JSON invalide — il ne semble pas provenir de ce guide PASS.");
+          return;
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        if (data.temoignages) temoignages = data.temoignages;
+        loadFromStorage();
+        buildManualRanking();
+        renderTemoignages();
+        alert('Données importées avec succès !');
+      } catch(err) {
+        alert('Erreur lors de la lecture du fichier : ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // reset so same file can be re-imported
+  }
+
+  function setStatus(msg) { document.getElementById('exportStatus').textContent = msg; }
+
+  async function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  // Build a clean off-screen clone of an element for rendering
+  function buildClone(el, width) {
+    const clone = el.cloneNode(true);
+    // hide delete buttons in clone
+    clone.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'none');
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `position:fixed; left:-9999px; top:0; width:${width}px; background:var(--bg); padding:20px; font-family:'Outfit',sans-serif;`;
+    wrap.appendChild(clone);
+    document.body.appendChild(wrap);
+    return wrap;
+  }
+
+  async function captureElement(el, filename) {
+    const canvas = await html2canvas(el, { scale: 4, useCORS: true, backgroundColor: null, logging: false });
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    return canvas;
+  }
+
+  async function exportAllPNG() {
+    try {
+      setStatus('Chargement…');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      const code = document.getElementById('dispCode').textContent;
+      const header = document.getElementById('coursHeader');
+      const ranking = document.getElementById('rankingSection');
+      const container = document.getElementById('temoignagesContainer');
+
+      // Build combined clone: header + mot du prof (if any) + ranking + temoignages
+      const combined = document.createElement('div');
+      combined.appendChild(header.cloneNode(true));
+      const motProfSection = document.getElementById('motProfSection');
+      if (motProfSection && motProfSection.style.display !== 'none') {
+        const div0 = document.createElement('div'); div0.style.cssText = 'margin-top:20px;';
+        div0.appendChild(motProfSection.cloneNode(true)); div0.querySelector('#motProfSection').style.display = '';
+        combined.appendChild(div0);
+      }
+      const div1 = document.createElement('div');
+      div1.style.cssText = 'margin-top:20px;';
+      div1.appendChild(ranking.cloneNode(true));
+      combined.appendChild(div1);
+      const divider = document.createElement('div');
+      divider.style.cssText = 'height:1px;background:var(--c3);margin:20px 0;';
+      combined.appendChild(divider);
+      combined.appendChild(container.cloneNode(true));
+
+      const wrap = buildClone(combined, 660);
+      wrap.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'none');
+      await new Promise(r => setTimeout(r, 100));
+      await captureElement(wrap, `${code}_guide_complet.png`);
+      document.body.removeChild(wrap);
+      setStatus('✓ PNG exporté !');
+    } catch(e) { setStatus('Erreur : ' + e.message); console.error(e); }
+  }
+
+  async function exportSeparatePNG() {
+    try {
+      setStatus('Chargement…');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+      const code = document.getElementById('dispCode').textContent;
+      const cards = document.querySelectorAll('.temoignage');
+      if (!cards.length) { setStatus('Aucun témoignage à exporter.'); return; }
+      const zip = new JSZip();
+
+      // Header + ranking as its own PNG
+      setStatus('Export header…');
+      const header = document.getElementById('coursHeader');
+      const ranking = document.getElementById('rankingSection');
+      const headerCombined = document.createElement('div');
+      headerCombined.appendChild(header.cloneNode(true));
+      const motProfSection = document.getElementById('motProfSection');
+      if (motProfSection && motProfSection.style.display !== 'none') {
+        const div0 = document.createElement('div'); div0.style.cssText = 'margin-top:16px;';
+        div0.appendChild(motProfSection.cloneNode(true)); div0.querySelector('#motProfSection').style.display = '';
+        headerCombined.appendChild(div0);
+      }
+      const div1 = document.createElement('div');
+      div1.style.cssText = 'margin-top:16px;';
+      div1.appendChild(ranking.cloneNode(true));
+      headerCombined.appendChild(div1);
+      const wrapHeader = buildClone(headerCombined, 660);
+      await new Promise(r => setTimeout(r, 80));
+      const canvasHeader = await html2canvas(wrapHeader, { scale: 4, useCORS: true, backgroundColor: null, logging: false });
+      document.body.removeChild(wrapHeader);
+      zip.file(`${code}_header.png`, canvasHeader.toDataURL('image/png').split(',')[1], { base64: true });
+
+      // Individual témoignages
+      for (let i = 0; i < cards.length; i++) {
+        setStatus(`Export témoignage ${i+1}/${cards.length}…`);
+        const wrap = buildClone(cards[i], 660);
+        await new Promise(r => setTimeout(r, 80));
+        const canvas = await html2canvas(wrap, { scale: 4, useCORS: true, backgroundColor: null, logging: false });
+        document.body.removeChild(wrap);
+        zip.file(`${code}_temoignage_${i+1}.png`, canvas.toDataURL('image/png').split(',')[1], { base64: true });
+        await new Promise(r => setTimeout(r, 80));
+      }
+      setStatus('Génération du ZIP…');
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `${code}_temoignages_individuels.zip`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatus(`✓ ZIP avec header + ${cards.length} PNGs téléchargé !`);
+    } catch(e) { setStatus('Erreur : ' + e.message); console.error(e); }
+  }
+
+  async function exportZipPNG() {
+    try {
+      setStatus('Chargement…');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+      const code = document.getElementById('dispCode').textContent;
+      const zip = new JSZip();
+
+      // Full PNG
+      const header = document.getElementById('coursHeader');
+      const ranking = document.getElementById('rankingSection');
+      const container = document.getElementById('temoignagesContainer');
+      const combined = document.createElement('div');
+      combined.appendChild(header.cloneNode(true));
+      const motProfSectionZ = document.getElementById('motProfSection');
+      if (motProfSectionZ && motProfSectionZ.style.display !== 'none') {
+        const div0 = document.createElement('div'); div0.style.cssText = 'margin-top:20px;';
+        div0.appendChild(motProfSectionZ.cloneNode(true)); div0.querySelector('#motProfSection').style.display = '';
+        combined.appendChild(div0);
+      }
+      const div1 = document.createElement('div');
+      div1.style.cssText = 'margin-top:20px;';
+      div1.appendChild(ranking.cloneNode(true));
+      combined.appendChild(div1);
+      const divider = document.createElement('div');
+      divider.style.cssText = 'height:1px;background:var(--c3);margin:20px 0;';
+      combined.appendChild(divider);
+      combined.appendChild(container.cloneNode(true));
+      const wrapAll = buildClone(combined, 660);
+      wrapAll.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'none');
+      await new Promise(r => setTimeout(r, 100));
+      const canvasAll = await html2canvas(wrapAll, { scale: 4, useCORS: true, backgroundColor: null, logging: false });
+      document.body.removeChild(wrapAll);
+      zip.file(`${code}_guide_complet.png`, canvasAll.toDataURL('image/png').split(',')[1], { base64: true });
+
+      // Individual PNGs
+      const cards = document.querySelectorAll('.temoignage');
+      for (let i = 0; i < cards.length; i++) {
+        setStatus(`ZIP : ${i+1}/${cards.length}…`);
+        const wrap = buildClone(cards[i], 660);
+        await new Promise(r => setTimeout(r, 80));
+        const canvas = await html2canvas(wrap, { scale: 4, useCORS: true, backgroundColor: null, logging: false });
+        document.body.removeChild(wrap);
+        zip.file(`${code}_temoignage_${i+1}.png`, canvas.toDataURL('image/png').split(',')[1], { base64: true });
+        await new Promise(r => setTimeout(r, 80));
+      }
+
+      setStatus('Génération du ZIP…');
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `${code}_guide_PASS_images.zip`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatus('✓ ZIP téléchargé !');
+    } catch(e) { setStatus('Erreur : ' + e.message); console.error(e); }
+  }
+</script>
+</body>
+</html>
